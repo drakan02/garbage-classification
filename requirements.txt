@@ -1,5 +1,0 @@
-customtkinter
-opencv-python
-pillow
-ultralytics==8.3.63
-pyinstaller

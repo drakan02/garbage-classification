@@ -1,0 +1,11 @@
+data/batch_*
+__pycache__/
+*.py[cod]
+*$py.class
+
+taco_yolo/
+
+.ipynb_checkpoints/
+temp_upload_img.jpg
+
+.vscode/

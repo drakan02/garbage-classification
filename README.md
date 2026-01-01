@@ -1,0 +1,1 @@
+# Real-Time Waste Classification Using YOLOv12-Based Deep Learning Model

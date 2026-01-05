@@ -5,15 +5,14 @@ from ultralytics import YOLO
 from collections import deque, Counter
 
 # ===== CONFIG =====
-DETECT_MODEL_PATH = "yolov8s-worldv2.pt" # Nên dùng bản FP16 hoặc v2
-CLS_MODEL_PATH = "best.onnx"          # Model ONNX của bạn
-CONF_DET = 0.3    # <--- TĂNG LÊN để giảm nhiễu
-CONF_CLS = 0.5    # <--- TĂNG LÊN để chắc chắn hơn
+DETECT_MODEL_PATH = "models/yolov8s-worldv2.pt" 
+CLS_MODEL_PATH = "models/best.onnx"          # Model ONNX 
+CONF_DET = 0.3    
+CONF_CLS = 0.5   
 CAM_ID = 0
 IMG_SIZE = 224
 
 # Bộ nhớ đệm để khử nhiễu (Lưu 10 kết quả gần nhất cho mỗi ID)
-# Càng tăng số này (ví dụ 15, 20) thì càng mượt nhưng sẽ bị trễ (delay) một chút
 SMOOTHING_BUFFER_LEN = 10 
 track_history = {} # Dictionary lưu lịch sử: {track_id: deque([label1, label2...])}
 
@@ -22,7 +21,6 @@ class_names = [
     "metal", "paper", "plastic", "shoes", "trash"
 ]
 
-# ... (Giữ nguyên hàm resize_with_white_padding và softmax ở các bước trước) ...
 def resize_with_white_padding(image, target_size):
     h, w = image.shape[:2]
     scale = min(target_size / h, target_size / w)
@@ -41,7 +39,7 @@ def softmax(x):
 print("--> Đang tải mô hình...")
 try:
     det_model = YOLO(DETECT_MODEL_PATH)
-    # ... (Set classes cho YOLO-World như cũ) ...
+
     det_model.set_classes(["battery", "alkaline battery", "AA battery", "AAA battery", "lithium battery", "button cell", "dry cell",
                        "food waste", "fruit", "vegetable", "banana peel", "apple core", "organic waste", "leftover food", "rotten food",
                        "cardboard box", "carton", "pizza box", "shipping box", "corrugated box", "brown box",
@@ -111,12 +109,11 @@ while True:
             # Thêm nhãn mới vào hàng đợi
             track_history[track_id].append(raw_label)
 
-            # Tìm nhãn xuất hiện nhiều nhất trong lịch sử (Vote)
-            # most_common(1) trả về [(label, count)]
+            # Tìm nhãn xuất hiện nhiều nhất trong lịch sử
             final_label, count = Counter(track_history[track_id]).most_common(1)[0]
 
             # --- DRAW ---
-            # Vẽ màu xanh lá nếu ổn định, màu vàng nếu đang lưỡng lự (vote chưa áp đảo)
+            # Vẽ màu xanh lá nếu ổn định, màu vàng nếu đang lưỡng lự
             color = (0, 255, 0)
             if final_label == "unknown":
                 color = (0, 0, 255) # Đỏ
@@ -129,8 +126,6 @@ while True:
             cv2.putText(frame, f"ID:{track_id} {final_label}", (x1, y1 - 10), 
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
 
-    # Dọn dẹp bộ nhớ: Xóa các ID không còn xuất hiện quá lâu (để tránh tràn RAM dictionary)
-    # (Phần này nâng cao, bạn có thể tạm bỏ qua nếu chạy ngắn)
 
     cv2.imshow("Smart Waste Detection", frame)
     if cv2.waitKey(1) & 0xFF == ord("q"):

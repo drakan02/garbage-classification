@@ -7,8 +7,8 @@ from tkinter import filedialog
 import os
 
 # ===== CẤU HÌNH (CONFIG) =====
-DETECT_MODEL_PATH = "yolov8s-worldv2.pt"
-CLS_MODEL_PATH = "best.onnx"
+DETECT_MODEL_PATH = "models/yolov8s-worldv2.pt"
+CLS_MODEL_PATH = "models/best.onnx"
 CONF_DET = 0.1
 CONF_CLS = 0.3
 IMG_SIZE = 224

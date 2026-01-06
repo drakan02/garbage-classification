@@ -29,7 +29,7 @@ def main():
 
         workers=4,
         project="garbage_project",
-        name="train_hiuhiu"
+        name="train_run"
     )
 
 if __name__ == "__main__":

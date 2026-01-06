@@ -13,7 +13,7 @@ cache: false
 device: '0'
 workers: 4
 project: garbage_project
-name: train_run2
+name: train_run
 exist_ok: false
 pretrained: true
 optimizer: auto
@@ -103,4 +103,4 @@ auto_augment: randaugment
 erasing: 0.4
 cfg: null
 tracker: botsort.yaml
-save_dir: /kaggle/working/garbage_project/train_run2
+save_dir: garbage_project/train_run2

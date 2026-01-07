@@ -6,6 +6,7 @@ import customtkinter as ctk
 from tkinter import filedialog, messagebox
 from PIL import Image, ImageOps
 from ultralytics import YOLO
+import random
 
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("green")
@@ -199,7 +200,7 @@ class App(ctk.CTk):
         ctk.CTkLabel(guide_card, text="USER GUIDE & TROUBLESHOOTING", font=FONTS["h3"], text_color=COLORS["primary"]).pack(anchor="w", pady=(25, 20), padx=30)
         
         self.create_guide_row(guide_card, "error", "Black Screen:", "Ensure camera permissions are granted.")
-        self.create_guide_row(guide_card, "target", "No Detection:", "Move object closer (30-50cm).")
+        self.create_guide_row(guide_card, "target", "No Detection:", "Move object closer (10-30cm).")
         
         ctk.CTkFrame(guide_card, height=1, fg_color="#888").pack(fill="x", pady=20, padx=30)
         
@@ -366,7 +367,28 @@ class App(ctk.CTk):
                 )
                 result = results[0]
                 
-                plotted_img_bgr = result.plot()
+                plotted_img_bgr = result.orig_img.copy()
+
+                if result.boxes:
+                    for box in result.boxes:
+                        x1, y1, x2, y2 = map(int, box.xyxy[0])
+
+                        cls_id = int(box.cls[0])
+                        label_name = result.names[cls_id]
+                        conf = float(box.conf[0])
+
+                        if label_name.lower() == 'cardboard':
+                            color = (0, 215, 255) 
+                        else:
+                            color = (random.randint(0, 180), random.randint(0, 180), random.randint(0, 180))
+
+                        cv2.rectangle(plotted_img_bgr, (x1, y1), (x2, y2), color, 3)
+                        label_text = f"{label_name.upper()} {conf:.0%}"
+                        (w, h), _ = cv2.getTextSize(label_text, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)
+                        text_y = y1 - 10 if y1 - 25 > 0 else y1 + 25
+                        cv2.rectangle(plotted_img_bgr, (x1, text_y - h - 5), (x1 + w, text_y + 5), color, -1)
+                        cv2.putText(plotted_img_bgr, label_text, (x1, text_y), 
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
                 plotted_img_rgb = cv2.cvtColor(plotted_img_bgr, cv2.COLOR_BGR2RGB)
                 display_pil = Image.fromarray(plotted_img_rgb)
 

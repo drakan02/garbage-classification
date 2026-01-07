@@ -1,6 +1,6 @@
 task: detect
 mode: train
-model: yolov12n.pt
+model: yolo12n.pt
 data: data.yaml
 epochs: 100
 time: null
@@ -103,4 +103,4 @@ auto_augment: randaugment
 erasing: 0.4
 cfg: null
 tracker: botsort.yaml
-save_dir: garbage_project/train_run2
+save_dir: /kaggle/working/garbage_project/train_run

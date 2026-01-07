@@ -2,8 +2,8 @@ from ultralytics import YOLO
 import torch
 
 def main():
-    print("Đang tải mô hình YOLOv12n ...")
-    model = YOLO("yolov12n.pt")
+    print("Đang tải mô hình YOLO12n ...")
+    model = YOLO("yolo12n.pt")
 
     model.train(
         data="data.yaml",

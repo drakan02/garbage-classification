@@ -38,7 +38,7 @@ FONTS = {
     "body_bold": ("Roboto", 20, "bold"),
     "btn": ("Roboto", 15, "bold"),
     "small": ("Roboto", 12),
-    "res_single": ("Roboto", 24, "bold"), 
+    "res_single": ("Roboto", 20.5, "bold"), 
     "res_double": ("Roboto", 18, "bold") 
 }
 

@@ -113,6 +113,14 @@ python main.py
 
 ---
 
+##  Detection Result
+
+<p align="center">
+  <img src="images/detection.png" width="700">
+</p>
+
+---
+
 
 ##  Project Structure
 
